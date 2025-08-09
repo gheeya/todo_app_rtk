@@ -1,0 +1,15 @@
+.t-container {
+  display: grid;
+  grid-template-columns: 10fr 1fr;
+  overflow: visible;
+}
+.btn-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.btn-container span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
