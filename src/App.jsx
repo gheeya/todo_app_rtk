@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import Todo from "./components/Todo/Todo.jsx";
 import { useSelector, useDispatch } from "react-redux";
-import { addTodo } from "./store/todoSlice.js";
+import { addTodo, set } from "./store/todoSlice.js";
 
 function App() {
   // On page load get the data from the store
@@ -11,6 +11,11 @@ function App() {
 
   // Store the data and new data in todo
   const [todo, setTodo] = useState([]);
+
+  // When the component is first mounted i.e page is loaded/reloaded
+  useEffect(() => {
+    dispatch(set(JSON.parse(localStorage.getItem("todos"))));
+  }, [dispatch]);
 
   // Keep track of changing values
   useEffect(() => {
@@ -28,6 +33,10 @@ function App() {
         status: "active",
       };
       dispatch(addTodo(todo));
+      // Adding to localStorage array
+      const todoList = JSON.parse(localStorage.getItem("todos")) || [];
+      todoList.push(todo);
+      localStorage.setItem("todos", JSON.stringify(todoList));
     }
     document.querySelector("input").value = "";
   };

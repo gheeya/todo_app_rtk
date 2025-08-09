@@ -30,6 +30,14 @@ function Todo({ id, todo, status }) {
     const formData = new FormData(e.target);
     for (let [_, value] of formData.entries()) {
       dispatch(editTodo([id, { id, todo: value, status }]));
+      let todoList = JSON.parse(localStorage.getItem("todos"));
+      todoList = todoList.map((todo) => {
+        if (todo.id === id) {
+          return { id, todo: value, status };
+        }
+        return todo;
+      });
+      localStorage.setItem("todos", JSON.stringify(todoList));
     }
   };
 
@@ -37,10 +45,24 @@ function Todo({ id, todo, status }) {
   const handleCompleted = (e) => {
     const isChecked = e.target.checked;
     setCompleted(isChecked);
+    dispatch(
+      editTodo([id, { id, todo, status: isChecked ? "inactive" : "active" }])
+    );
+    let todoList = JSON.parse(localStorage.getItem("todos"));
+    todoList = todoList.map((todo) => {
+      if (todo.id === id) {
+        return { id, todo, status: isChecked ? "inactive" : "active" };
+      }
+      return todo;
+    });
+    localStorage.setItem("todos", JSON.stringify(todoList));
   };
 
   const handleDeleteClick = () => {
     dispatch(deleteTodo(id));
+    let todoList = JSON.parse(localStorage.getItem("todos"));
+    todoList = todoList.filter((todo) => todo.id === id);
+    localStorage.setItem("todos", JSON.stringify(todoList));
   };
   return (
     <div className="border-1 p-1 h-10 w-full my-2 t-container">
