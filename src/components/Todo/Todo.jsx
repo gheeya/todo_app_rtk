@@ -5,6 +5,7 @@ import { editTodo, deleteTodo } from "../../store/todoSlice";
 
 function Todo({ id, todo, status }) {
   const [isEditable, setEditable] = useState(false);
+  const [completed, setCompleted] = useState(false);
   const dispatch = useDispatch();
 
   // Used for storing the todo value
@@ -17,7 +18,9 @@ function Todo({ id, todo, status }) {
   }, []);
 
   const handleEditClick = () => {
-    setEditable((prev) => !prev);
+    if (!completed) {
+      setEditable((prev) => !prev);
+    }
   };
 
   const handleTodoSubmit = (e) => {
@@ -30,12 +33,25 @@ function Todo({ id, todo, status }) {
     }
   };
 
+  // React is async, so I cant use the completed state variable after updating it immediately
+  const handleCompleted = (e) => {
+    const isChecked = e.target.checked;
+    setCompleted(isChecked);
+  };
+
   const handleDeleteClick = () => {
     dispatch(deleteTodo(id));
   };
   return (
     <div className="border-1 p-1 h-10 w-full my-2 t-container">
-      <div className="content-container " data-id={id} data-status={status}>
+      <div className="check-container">
+        <input type="checkbox" onChange={handleCompleted} />
+      </div>
+      <div
+        className={`content-container ${completed ? "line-through" : ""}`}
+        data-id={id}
+        data-status={status}
+      >
         {isEditable ? (
           <form onSubmit={handleTodoSubmit}>
             <input
@@ -47,7 +63,7 @@ function Todo({ id, todo, status }) {
             />
           </form>
         ) : (
-          <div>{value}</div>
+          <div className="w-full h-8">{value}</div>
         )}
       </div>
       <div className="btn-container">
