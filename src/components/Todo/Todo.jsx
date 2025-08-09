@@ -29,6 +29,10 @@ function Todo({ id, todo, status }) {
       dispatch(editTodo([id, { id, todo: value, status }]));
     }
   };
+
+  const handleDeleteClick = () => {
+    dispatch(deleteTodo(id));
+  };
   return (
     <div className="border-1 p-1 h-10 w-full my-2 t-container">
       <div className="content-container " data-id={id} data-status={status}>
@@ -53,7 +57,12 @@ function Todo({ id, todo, status }) {
         >
           &#9998;
         </span>
-        <span className="delete-btn text-xl text-red-700">&#10539;</span>
+        <span
+          onClick={handleDeleteClick}
+          className="delete-btn text-xl text-red-700 cursor-default"
+        >
+          &#10539;
+        </span>
       </div>
     </div>
   );
